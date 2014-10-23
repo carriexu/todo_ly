@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>task_view.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>task_view.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"task_view.js linked"</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">TaskView</span><span class="hljs-params">(model)</span></span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'view created with model:'</span>, model);
+  <span class="hljs-keyword">this</span>.$el   = $(<span class="hljs-string">"&lt;li&gt;"</span>);
+  <span class="hljs-keyword">this</span>.model = model; <span class="hljs-comment">//set a reference to the model here, model is anything built with the term new Task</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>therefore, model refers to each individual task
+this is the hook, that hooks into the Task model</p>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>attach the view to the model so that it can message the view!
+this is the 2nd part of the two way binding
+model.view = this; // all changes are triggered from the client, ie
+via the view, so this isn’t necessary — but if
+the server was making changes, then we may need
+to trigger events from the model on the view…</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>}
+
+TaskView.prototype = {
+  template: _.template($(<span class="hljs-string">"#task-template"</span>).html()),
+
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'  view:render'</span>, <span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">var</span> temp = <span class="hljs-keyword">this</span>.template({task: <span class="hljs-keyword">this</span>.model}); <span class="hljs-comment">//works like render, render this template with this model</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>debugger</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.$el = $(temp); <span class="hljs-comment">// reset el</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>debugger</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>; <span class="hljs-comment">// for chaining!</span>
+  },
+
+  init: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'  view:init'</span>, <span class="hljs-keyword">this</span>);
+    <span class="hljs-keyword">var</span> view = <span class="hljs-keyword">this</span>; <span class="hljs-comment">// make it more semantic below...</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>build the element and then add to the DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    view.render();
+    $(<span class="hljs-string">"#tasks"</span>).append(view.$el);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>attach event listeners, et al</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    view.$el.on(<span class="hljs-string">"click"</span>, <span class="hljs-string">"input"</span>,       view, view.toggleCompleted);
+    view.$el.on(<span class="hljs-string">"click"</span>, <span class="hljs-string">"span.remove"</span>, view, view.remove);
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">this</span>; <span class="hljs-comment">// for chaining!</span>
+  },
+
+  toggleCompleted: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'-&gt; view:toggleCompleted'</span>, event.data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-8">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-8">&#182;</a>
+              </div>
+              <p>this is the DOM node
+event.data refers to the view instance (set in the handler above)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    event.data.$el.find(<span class="hljs-string">"span.description"</span>).toggleClass(<span class="hljs-string">'completed'</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-9">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-9">&#182;</a>
+              </div>
+              <p>message the model
+this is the binding part</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    event.data.model.toggleCompleted();
+  },
+
+  remove: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(event)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'-&gt; view:remove'</span>, event.data);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-10">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-10">&#182;</a>
+              </div>
+              <p>remove from the DOM</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    event.data.$el.remove();</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-11">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-11">&#182;</a>
+              </div>
+              <p>remove from global list!
+<a href="http://stackoverflow.com/questions/208105/how-to-remove-a-property-from-a-javascript-object">http://stackoverflow.com/questions/208105/how-to-remove-a-property-from-a-javascript-object</a></p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">delete</span> todoApp.taskViews[event.data.viewId];</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-12">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-12">&#182;</a>
+              </div>
+              <p>message the model</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    event.data.model.destroy();
+  }
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

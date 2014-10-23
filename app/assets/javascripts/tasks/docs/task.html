@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>task.js</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
+  <link rel="stylesheet" media="all" href="docco.css" />
+</head>
+<body>
+  <div id="container">
+    <div id="background"></div>
+    
+    <ul class="sections">
+        
+          <li id="title">
+              <div class="annotation">
+                  <h1>task.js</h1>
+              </div>
+          </li>
+        
+        
+        
+        <li id="section-1">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-1">&#182;</a>
+              </div>
+              
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-built_in">console</span>.log(<span class="hljs-string">"task.js linked"</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <p>below is the Task constructor, we are passing in a data object here
+we do this because we want to be able to refer back to it
+what is does data stand for?
+data could have been named any other name
+it represents the specific to-do item that the Task is calling on
+for example, in our console, we can type the following
+var data = {id: 1, description: “stuff”, completed: false }
+var thing = new Task(data)
+this creates a new object named data that we can pass into Task</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">Task</span><span class="hljs-params">(data)</span> </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'model created with data:'</span>, data, <span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-3">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-3">&#182;</a>
+              </div>
+              <p>you might be wondering, what does the below this refer to?
+this is referring to the Task, the constructor function
+we are setting the attributes of the data object we passed through to be the
+attributes of the Task</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.id          = data.id;
+  <span class="hljs-keyword">this</span>.completed   = data.completed;
+  <span class="hljs-keyword">this</span>.description = data.description;
+}</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-4">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <p>this is a function for that updates the</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>Task.prototype.toggleCompleted = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'-&gt; model:toggleCompleted'</span>, <span class="hljs-keyword">this</span>);</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
+              </div>
+              <p>what is this in here? it is the Task object, below is an example
+Task {id: 9, completed: false, description: “Sack Winterfell”, toggleCompleted: function, create: function…}
+what does this.completed do?
+this sets the completed boolean value on that object to the opposite of its previous value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.completed = !<span class="hljs-keyword">this</span>.completed; <span class="hljs-comment">// update model!</span></pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-6">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <p>what does this.update do?
+calls the Task.prototype.update
+which makes an ajax call and updates the database with the new completed boolean value</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">this</span>.update(); <span class="hljs-comment">// persist!</span>
+}
+
+Task.prototype.create = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:create initiated'</span>);
+  $.ajax({
+    url:      <span class="hljs-string">"/tasks"</span>,
+    type:     <span class="hljs-string">"POST"</span>,
+    dataType: <span class="hljs-string">"json"</span>,
+    context:  <span class="hljs-keyword">this</span>, <span class="hljs-comment">// this sets context in done to the object</span>
+    data: {
+      task: { <span class="hljs-comment">// nested for rails strong params (white-listing)!</span>
+        description: <span class="hljs-keyword">this</span>.description,
+        completed:   <span class="hljs-keyword">this</span>.completed
+      }
+    }
+  }).done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span></span>{</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
+              </div>
+              <p>give the model the data from the server (id, etc.)</p>
+
+            </div>
+            
+            <div class="content"><div class='highlight'><pre>    <span class="hljs-keyword">this</span>.id        = data.id;
+    <span class="hljs-keyword">this</span>.completed = data.completed;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:create complete'</span>, data, <span class="hljs-keyword">this</span>);
+  });
+}
+
+Task.prototype.update = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:update initiated'</span>);
+  $.ajax({
+    url:      <span class="hljs-string">"/tasks/"</span> + <span class="hljs-keyword">this</span>.id,
+    type:     <span class="hljs-string">"PATCH"</span>,
+    dataType: <span class="hljs-string">"json"</span>,
+    context:  <span class="hljs-keyword">this</span>, <span class="hljs-comment">// this sets context in done to the object</span>
+    data: {
+      task: { <span class="hljs-comment">// nested for rails strong params (white-listing)!</span>
+        description: <span class="hljs-keyword">this</span>.description,
+        completed:   <span class="hljs-keyword">this</span>.completed
+      }
+    }
+  }).done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span></span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:update complete'</span>, data, <span class="hljs-keyword">this</span>);
+  });
+}
+
+Task.prototype.destroy = <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span></span>{
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:destroy initiated'</span>);
+  $.ajax({
+    url:      <span class="hljs-string">"/tasks/"</span> + <span class="hljs-keyword">this</span>.id,
+    type:     <span class="hljs-string">"DELETE"</span>,
+    dataType: <span class="hljs-string">"json"</span>,
+    context:  <span class="hljs-keyword">this</span> <span class="hljs-comment">// this sets context in done to the object</span>
+  }).done(<span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(data)</span></span>{
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'!(AJAX) model:destroy complete'</span>, data, <span class="hljs-keyword">this</span>);
+  });
+}</pre></div></div>
+            
+        </li>
+        
+    </ul>
+  </div>
+</body>
+</html>

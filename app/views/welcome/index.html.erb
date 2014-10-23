@@ -1,0 +1,30 @@
+<div id="content">
+  <div class="task-create">
+    <header>
+      <h1>Todo.ly</h1>
+      <h2>Get stuff done!</h2>
+    </header>
+    <form>
+      <fieldset>
+        <legend>Create a New Task</legend>
+        <label>
+          New Task <input type="text" name="item" />
+        </label>
+        <button>Save</button>
+      </fieldset>
+    </form>
+  </div>
+  <div class="task-list">
+    <h3>Tasks To Do</h3>
+    <ul id="tasks"></ul>
+  </div>
+</div>
+
+<script type="text/template" id="task-template">
+  <li>
+    <span class="description<%%= task.completed ? " completed" : "" %>">
+      <%%= task.description %></span>
+    <input type="checkbox"  <%%= task.completed ? "checked" : "" %>/>
+    <span class="remove">&times;</span>
+  </li>
+</script>
